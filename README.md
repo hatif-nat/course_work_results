@@ -21,7 +21,7 @@ python3 add_Tatoeba.py
 python3 result.py
 ```
 
-Used code, programm and resources from:  
+Used code, programs and resources from:  
 https://github.com/UKPLab/EasyNMT  
 https://github.com/clab/fast_align  
 https://github.com/neulab/awesome-align  
