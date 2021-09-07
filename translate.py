@@ -13,8 +13,8 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.utils.multiclass  import unique_labels
 
 import nltk
-nltk.download('wordnet')
-nltk.download('punkt')
+#nltk.download('wordnet')
+#nltk.download('punkt')
 from nltk.stem import WordNetLemmatizer 
 import pandas as pd
 import re
