@@ -475,64 +475,120 @@ count_trans, al_words = countTranslates(all_info.positions, aligns, trans)
 al_words = assoc(al_words)
 count_trans = countTranslates2(al_words)
 
-true_val = 0
-false_val = 0
-strange_val = 0
+true_true = 0
+true_false = 0
+false_true = 0
+false_false = 0
+strange = 0
 t = 0
 for i in range(len(al_words)):
   if al_words[i] in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
-     true_val += 1
+     true_true += 1
   else:
     t = 0
     for el in translates[all_info.word[i]]:
       if al_words[i] in translates[all_info.word[i]][el]:
-        false_val += 1
+        false_true += 1
         t = 1
         break
     if (t == 0):
-      strange_val += 1
+          str1, str2 = re.split('[ ][|]{3}[ ]', trans[i])
+          l2 = re.split('[\s]', str2)
+          wor = all_info.word[i]
+          end = 0
+          for w in l2:    
+            lemmatizer = WordNetLemmatizer()
+            w2 = lemmatizer.lemmatize(w)
+            w2 = re.sub(r'[^-a-zA-Z]', r'', w2)
+            w2 = w2.lower()
+            if w2 in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
+              true_false += 1
+              end = 1
+              break
+            for j in translates[wor]:
+              if w2 in translates[wor][j]:
+                false_false += 1
+                end = 1
+                break
+            if end == 1:
+              break
+          if end == 0:
+            strange += 1     
       #print('strange', all_info.word[i], al_words[i])
-print('\n')
-print('\nResults of base mBart + awesome-align + assoc:\n')
-print('Доля правильных сопоставлений и переводов:   ', format(true_val / len(al_words), '.5f'))
-print('Доля неправильных сопоставлений и переводов: ', format(false_val / len(al_words), '.5f'))
-print('Доля странных сопоставлений и переводов:     ', format(strange_val / len(al_words), '.5f'))
-f4.write('\n\nResults of  base mBart + awesome-align + assocf:\n')
-f4.write('Доля правильных сопоставлений и переводов:     ' + str( format(true_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля неправильных сопоставлений и переводов:   ' + str( format(false_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля странных сопоставлений и переводов:       ' + str( format(strange_val / len(al_words), '.5f')) + '\n')
+print('\n\nResults of  base mBart + awesome-align + assoc:\n')
+print('Доля правильных переводов и правильных сопоставлений:   ', format(true_true / len(al_words), '.5f'))
+print('Доля правильных переводов и неправильных сопоставлений:   ', format(true_false / len(al_words), '.5f'))
+print('Доля неправильных переводов и правильных сопоставлений: ', format(false_true / len(al_words), '.5f'))
+print('Доля неправильных переводов и неправильных сопоставлений: ', format(false_false / len(al_words), '.5f'))
+print('Доля странных сопоставлений и переводов:     ', format(strange / len(al_words), '.5f'))
+
+f4.write('\n\nResults of  base mBart + awesome-align + assoc :\n')
+f4.write('Доля правильных переводов и правильных сопоставлений:   '+ str( format(true_true / len(al_words), '.5f')) +  '\n')
+f4.write('Доля правильных переводов и неправильных сопоставлений:   ' + str( format(true_false / len(al_words), '.5f')) + '\n')
+f4.write('Доля неправильных переводов и правильных сопоставлений: ' + str( format(false_true / len(al_words), '.5f')) +'\n')
+f4.write('Доля неправильных переводов и неправильных сопоставлений: ' + str( format(false_false / len(al_words), '.5f'))  +'\n')
+f4.write('Доля странных сопоставлений и переводов:     '+  str(format(strange / len(al_words), '.5f')) + '\n')
 print('\n')
 
 
 al_words = unific(al_words, trans)
 count_trans = countTranslates2(al_words)
 
-true_val = 0
-false_val = 0
-strange_val = 0
+true_true = 0
+true_false = 0
+false_true = 0
+false_false = 0
+strange = 0
 t = 0
 for i in range(len(al_words)):
   if al_words[i] in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
-     true_val += 1
+     true_true += 1
   else:
     t = 0
     for el in translates[all_info.word[i]]:
       if al_words[i] in translates[all_info.word[i]][el]:
-        false_val += 1
+        false_true += 1
         t = 1
         break
     if (t == 0):
-      strange_val += 1
+          str1, str2 = re.split('[ ][|]{3}[ ]', trans[i])
+          l2 = re.split('[\s]', str2)
+          wor = all_info.word[i]
+          end = 0
+          for w in l2:    
+            lemmatizer = WordNetLemmatizer()
+            w2 = lemmatizer.lemmatize(w)
+            w2 = re.sub(r'[^-a-zA-Z]', r'', w2)
+            w2 = w2.lower()
+            if w2 in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
+              true_false += 1
+              end = 1
+              break
+            for j in translates[wor]:
+              if w2 in translates[wor][j]:
+                false_false += 1
+                end = 1
+                break
+            if end == 1:
+              break
+          if end == 0:
+            strange += 1     
       #print('strange', all_info.word[i], al_words[i])
-print('\n')
-print('\nResults of base mBart + awesome-align + assoc + unific:\n')
-print('Доля правильных сопоставлений и переводов:   ', format(true_val / len(al_words), '.5f'))
-print('Доля неправильных сопоставлений и переводов: ', format(false_val / len(al_words), '.5f'))
-print('Доля странных сопоставлений и переводов:     ', format(strange_val / len(al_words), '.5f'))
+print('\n\nResults of  base mBart + awesome-align + assoc + unific:\n')
+print('Доля правильных переводов и правильных сопоставлений:   ', format(true_true / len(al_words), '.5f'))
+print('Доля правильных переводов и неправильных сопоставлений:   ', format(true_false / len(al_words), '.5f'))
+print('Доля неправильных переводов и правильных сопоставлений: ', format(false_true / len(al_words), '.5f'))
+print('Доля неправильных переводов и неправильных сопоставлений: ', format(false_false / len(al_words), '.5f'))
+print('Доля странных сопоставлений и переводов:     ', format(strange / len(al_words), '.5f'))
+
 f4.write('\n\nResults of  base mBart + awesome-align + assoc + unific:\n')
-f4.write('Доля правильных сопоставлений и переводов:     ' + str( format(true_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля неправильных сопоставлений и переводов:   ' + str( format(false_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля странных сопоставлений и переводов:       ' + str( format(strange_val / len(al_words), '.5f')) + '\n')
+f4.write('Доля правильных переводов и правильных сопоставлений:   '+ str( format(true_true / len(al_words), '.5f'))  + '\n')
+f4.write('Доля правильных переводов и неправильных сопоставлений:   ' + str( format(true_false / len(al_words), '.5f')) + '\n')
+f4.write('Доля неправильных переводов и правильных сопоставлений: ' + str( format(false_true / len(al_words), '.5f')) + '\n')
+f4.write('Доля неправильных переводов и неправильных сопоставлений: ' + str( format(false_false / len(al_words), '.5f')) + '\n')
+f4.write('Доля странных сопоставлений и переводов:     '+  str(format(strange / len(al_words), '.5f')) + '\n')
+
+
 print('\n')
 
 
@@ -566,32 +622,59 @@ count_trans = countTranslates2(al_words)
 
 """Посмотрим, в какой части предложений многозначное слово правильно перевелось и сопоставилось со своим значением, с неправильным значением (то есть переводом другого значения данного слова), а также каков процент непонятных левых слов"""
 
-true_val = 0
-false_val = 0
-strange_val = 0
+true_true = 0
+true_false = 0
+false_true = 0
+false_false = 0
+strange = 0
 t = 0
 for i in range(len(al_words)):
   if al_words[i] in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
-     true_val += 1
+     true_true += 1
   else:
     t = 0
     for el in translates[all_info.word[i]]:
       if al_words[i] in translates[all_info.word[i]][el]:
-        false_val += 1
+        false_true += 1
         t = 1
         break
     if (t == 0):
-      strange_val += 1
+          str1, str2 = re.split('[ ][|]{3}[ ]', trans[i])
+          l2 = re.split('[\s]', str2)
+          wor = all_info.word[i]
+          end = 0
+          for w in l2:    
+            lemmatizer = WordNetLemmatizer()
+            w2 = lemmatizer.lemmatize(w)
+            w2 = re.sub(r'[^-a-zA-Z]', r'', w2)
+            w2 = w2.lower()
+            if w2 in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
+              true_false += 1
+              end = 1
+              break
+            for j in translates[wor]:
+              if w2 in translates[wor][j]:
+                false_false += 1
+                end = 1
+                break
+            if end == 1:
+              break
+          if end == 0:
+            strange += 1     
       #print('strange', all_info.word[i], al_words[i])
-print('\n')
-print('\nResults of only target sen + mBart + awesome-align + clasterize + unific:\n')
-print('Доля правильных сопоставлений и переводов:   ', format(true_val / len(al_words), '.5f'))
-print('Доля неправильных сопоставлений и переводов: ', format(false_val / len(al_words), '.5f'))
-print('Доля странных сопоставлений и переводов:     ', format(strange_val / len(al_words), '.5f'))
+print('\n\nResults of  only target sen + mBart + awesome-align + clasterize + unific:\n')
+print('Доля правильных переводов и правильных сопоставлений:   ', format(true_true / len(al_words), '.5f'))
+print('Доля правильных переводов и неправильных сопоставлений:   ', format(true_false / len(al_words), '.5f'))
+print('Доля неправильных переводов и правильных сопоставлений: ', format(false_true / len(al_words), '.5f'))
+print('Доля неправильных переводов и неправильных сопоставлений: ', format(false_false / len(al_words), '.5f'))
+print('Доля странных сопоставлений и переводов:     ', format(strange / len(al_words), '.5f'))
+
 f4.write('\n\nResults of  only target sen + mBart + awesome-align + clasterize + unific:\n')
-f4.write('Доля правильных сопоставлений и переводов:     ' + str( format(true_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля неправильных сопоставлений и переводов:   ' + str( format(false_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля странных сопоставлений и переводов:       ' + str( format(strange_val / len(al_words), '.5f')) + '\n')
+f4.write('Доля правильных переводов и правильных сопоставлений:   '+ str( format(true_true / len(al_words), '.5f')) + '\n')
+f4.write('Доля правильных переводов и неправильных сопоставлений:   ' + str( format(true_false / len(al_words), '.5f')) + '\n')
+f4.write('Доля неправильных переводов и правильных сопоставлений: ' + str( format(false_true / len(al_words), '.5f')) + '\n')
+f4.write('Доля неправильных переводов и неправильных сопоставлений: ' + str( format(false_false / len(al_words), '.5f')) + '\n')
+f4.write('Доля странных сопоставлений и переводов:     '+  str(format(strange / len(al_words), '.5f')) + '\n')
 
 
 
@@ -604,32 +687,59 @@ count_trans = countTranslates2(al_words)
 
 """Посмотрим, в какой части предложений многозначное слово правильно перевелось и сопоставилось со своим значением, с неправильным значением (то есть переводом другого значения данного слова), а также каков процент непонятных левых слов"""
 
-true_val = 0
-false_val = 0
-strange_val = 0
+true_true = 0
+true_false = 0
+false_true = 0
+false_false = 0
+strange = 0
 t = 0
 for i in range(len(al_words)):
   if al_words[i] in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
-     true_val += 1
+     true_true += 1
   else:
     t = 0
     for el in translates[all_info.word[i]]:
       if al_words[i] in translates[all_info.word[i]][el]:
-        false_val += 1
+        false_true += 1
         t = 1
         break
     if (t == 0):
-      strange_val += 1
+          str1, str2 = re.split('[ ][|]{3}[ ]', trans[i])
+          l2 = re.split('[\s]', str2)
+          wor = all_info.word[i]
+          end = 0
+          for w in l2:    
+            lemmatizer = WordNetLemmatizer()
+            w2 = lemmatizer.lemmatize(w)
+            w2 = re.sub(r'[^-a-zA-Z]', r'', w2)
+            w2 = w2.lower()
+            if w2 in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
+              true_false += 1
+              end = 1
+              break
+            for j in translates[wor]:
+              if w2 in translates[wor][j]:
+                false_false += 1
+                end = 1
+                break
+            if end == 1:
+              break
+          if end == 0:
+            strange += 1     
       #print('strange', all_info.word[i], al_words[i])
-print('\n')
-print('\nResults of only target sen + mBart + awesome-align + assoc:\n')
-print('Доля правильных сопоставлений и переводов:   ', format(true_val / len(al_words), '.5f'))
-print('Доля неправильных сопоставлений и переводов: ', format(false_val / len(al_words), '.5f'))
-print('Доля странных сопоставлений и переводов:     ', format(strange_val / len(al_words), '.5f'))
+print('\n\nResults of  only target sen + mBart + awesome-align + assoc:\n')
+print('Доля правильных переводов и правильных сопоставлений:   ', format(true_true / len(al_words), '.5f'))
+print('Доля правильных переводов и неправильных сопоставлений:   ', format(true_false / len(al_words), '.5f'))
+print('Доля неправильных переводов и правильных сопоставлений: ', format(false_true / len(al_words), '.5f'))
+print('Доля неправильных переводов и неправильных сопоставлений: ', format(false_false / len(al_words), '.5f'))
+print('Доля странных сопоставлений и переводов:     ', format(strange / len(al_words), '.5f'))
+
 f4.write('\n\nResults of  only target sen + mBart + awesome-align + assoc:\n')
-f4.write('Доля правильных сопоставлений и переводов:     ' + str( format(true_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля неправильных сопоставлений и переводов:   ' + str( format(false_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля странных сопоставлений и переводов:       ' + str( format(strange_val / len(al_words), '.5f')) + '\n')
+f4.write('Доля правильных переводов и правильных сопоставлений:   '+ str( format(true_true / len(al_words), '.5f')) + '\n')
+f4.write('Доля правильных переводов и неправильных сопоставлений:   ' + str( format(true_false / len(al_words), '.5f')) + '\n')
+f4.write('Доля неправильных переводов и правильных сопоставлений: ' + str( format(false_true / len(al_words), '.5f')) + '\n')
+f4.write('Доля неправильных переводов и неправильных сопоставлений: ' + str( format(false_false / len(al_words), '.5f')) + '\n')
+f4.write('Доля странных сопоставлений и переводов:     '+  str(format(strange / len(al_words), '.5f')) + '\n')
 
 
 al_words = unific(al_words, trans)
@@ -637,31 +747,59 @@ count_trans = countTranslates2(al_words)
 
 """Посмотрим, в какой части предложений многозначное слово правильно перевелось и сопоставилось со своим значением, с неправильным значением (то есть переводом другого значения данного слова), а также каков процент непонятных левых слов"""
 
-true_val = 0
-false_val = 0
-strange_val = 0
+true_true = 0
+true_false = 0
+false_true = 0
+false_false = 0
+strange = 0
 t = 0
 for i in range(len(al_words)):
   if al_words[i] in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
-     true_val += 1
+     true_true += 1
   else:
     t = 0
     for el in translates[all_info.word[i]]:
       if al_words[i] in translates[all_info.word[i]][el]:
-        false_val += 1
+        false_true += 1
         t = 1
         break
     if (t == 0):
-      strange_val += 1
+          str1, str2 = re.split('[ ][|]{3}[ ]', trans[i])
+          l2 = re.split('[\s]', str2)
+          wor = all_info.word[i]
+          end = 0
+          for w in l2:    
+            lemmatizer = WordNetLemmatizer()
+            w2 = lemmatizer.lemmatize(w)
+            w2 = re.sub(r'[^-a-zA-Z]', r'', w2)
+            w2 = w2.lower()
+            if w2 in translates[all_info.word[i]][str(all_info.gold_sense_id[i])]:
+              true_false += 1
+              end = 1
+              break
+            for j in translates[wor]:
+              if w2 in translates[wor][j]:
+                false_false += 1
+                end = 1
+                break
+            if end == 1:
+              break
+          if end == 0:
+            strange += 1     
       #print('strange', all_info.word[i], al_words[i])
-print('\n')
-print('\nResults of only target sen + mBart + awesome-align + assoc + unific:\n')
-print('Доля правильных сопоставлений и переводов:   ', format(true_val / len(al_words), '.5f'))
-print('Доля неправильных сопоставлений и переводов: ', format(false_val / len(al_words), '.5f'))
-print('Доля странных сопоставлений и переводов:     ', format(strange_val / len(al_words), '.5f'))
+print('\n\nResults of  only target sen + mBart + awesome-align + assoc + unific:\n')
+print('Доля правильных переводов и правильных сопоставлений:   ', format(true_true / len(al_words), '.5f'))
+print('Доля правильных переводов и неправильных сопоставлений:   ', format(true_false / len(al_words), '.5f'))
+print('Доля неправильных переводов и правильных сопоставлений: ', format(false_true / len(al_words), '.5f'))
+print('Доля неправильных переводов и неправильных сопоставлений: ', format(false_false / len(al_words), '.5f'))
+print('Доля странных сопоставлений и переводов:     ', format(strange / len(al_words), '.5f'))
+
 f4.write('\n\nResults of  only target sen + mBart + awesome-align + assoc + unific:\n')
-f4.write('Доля правильных сопоставлений и переводов:     ' + str( format(true_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля неправильных сопоставлений и переводов:   ' + str( format(false_val / len(al_words), '.5f')) + '\n')
-f4.write('Доля странных сопоставлений и переводов:       ' + str( format(strange_val / len(al_words), '.5f')) + '\n')
+f4.write('Доля правильных переводов и правильных сопоставлений:   '+ str( format(true_true / len(al_words), '.5f')) + '\n')
+f4.write('Доля правильных переводов и неправильных сопоставлений:   ' + str( format(true_false / len(al_words), '.5f')) + '\n')
+f4.write('Доля неправильных переводов и правильных сопоставлений: ' + str( format(false_true / len(al_words), '.5f')) + '\n')
+f4.write('Доля неправильных переводов и неправильных сопоставлений: ' + str( format(false_false / len(al_words), '.5f')) + '\n')
+f4.write('Доля странных сопоставлений и переводов:     '+  str(format(strange / len(al_words), '.5f')) + '\n')
+
 
 f4.close()
