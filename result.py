@@ -1,7 +1,3 @@
-import subprocess
-import sys
-
-import gdown
 import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix
@@ -11,6 +7,7 @@ import statistics
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 
+import seaborn as sns
 from sklearn import svm, datasets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import plot_confusion_matrix
@@ -18,8 +15,8 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.utils.multiclass  import unique_labels
 
 import nltk
-nltk.download('wordnet')
-nltk.download('punkt')
+#nltk.download('wordnet')
+#nltk.download('punkt')
 from nltk.stem import WordNetLemmatizer 
 import pandas as pd
 import re

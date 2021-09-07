@@ -1,5 +1,7 @@
 import gdown
 import zipfile
+import nltk
+from easynmt import EasyNMT
 
 url = 'https://drive.google.com/uc?export=download&id=1xTLaO1awX3NmjVwKs0Od_eEKc933bVty'
 output = 'train.csv'
@@ -21,3 +23,9 @@ gdown.download(url, output, quiet=False)
 
 with zipfile.ZipFile("a.zip","r") as zip_ref:
     zip_ref.extractall("")
+	
+
+nltk.download('wordnet')
+nltk.download('punkt')
+
+model = EasyNMT('mbart50_m2en')
