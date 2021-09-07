@@ -1,7 +1,7 @@
 # course_work_results
 reproduse best results of course work.
 
-results print on the screen and save in results.txt
+results print on the screen and save in results.txt (print and save proportions of errors of different types)
 
 To reproduse all results (translate + alignment) run:
 ```bash
